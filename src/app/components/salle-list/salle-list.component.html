@@ -1,0 +1,9 @@
+<div class="container">
+  <h2>Liste des Salles</h2>
+  <ul>
+    <li *ngFor="let salle of salles">
+      <strong>{{ salle.nom }}</strong> - Capacité: {{ salle.capacite }} - Localisation: {{ salle.localisation }}
+      <p>Équipements: {{ salle.equipements }}</p>
+    </li>
+  </ul>
+</div>
