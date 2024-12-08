@@ -1,3 +1,5 @@
+<!-- src/app/components/reservation/reservation.component.html -->
+
 <div class="reservation-container">
     <h2>Faire une Réservation</h2>
     <form (ngSubmit)="makeReservation()">
@@ -5,14 +7,22 @@
         <select [(ngModel)]="reservationData.salle_id" name="salle" required>
             <option *ngFor="let salle of salles" [value]="salle.id">{{ salle.nom }}</option>
         </select>
+
         <label for="start_time">Début:</label>
         <input type="datetime-local" [(ngModel)]="reservationData.start_time" name="start_time" required />
+
         <label for="end_time">Fin:</label>
         <input type="datetime-local" [(ngModel)]="reservationData.end_time" name="end_time" required />
+
+        <label for="email">Email:</label>
+        <input type="email" [(ngModel)]="reservationData.email" name="email" required />
+
         <label for="preferences">Préférences:</label>
         <textarea [(ngModel)]="reservationData.preferences" name="preferences"></textarea>
+
         <label for="resources">Ressources:</label>
         <textarea [(ngModel)]="reservationData.resources" name="resources"></textarea>
+
         <button type="submit">Réserver</button>
     </form>
 
@@ -24,4 +34,5 @@
         <p>Ressources: {{ reservation.resources }}</p>
     </div>
 </div>
+
 <full-calendar [options]="calendarOptions"></full-calendar>
