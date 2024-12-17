@@ -7,6 +7,11 @@
         <select [(ngModel)]="reservationData.salle_id" name="salle" required>
             <option *ngFor="let salle of salles" [value]="salle.id">{{ salle.nom }}</option>
         </select>
+        <label for="user">Utilisateur:</label>
+        <select [(ngModel)]="reservationData.user_id" name="user" required>
+            <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
+        </select>
+
 
         <label for="start_time">Début:</label>
         <input type="datetime-local" [(ngModel)]="reservationData.start_time" name="start_time" required />

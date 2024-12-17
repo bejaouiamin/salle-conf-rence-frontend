@@ -9,12 +9,18 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { SalleListComponent } from './components/salle-list/salle-list.component';
 import { ReservationComponent } from './components/reservation/reservation.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { EquipmentComponent } from './components/equipment/equipment.component';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
+import { LoginRegisterComponent } from './components/login-register/login-register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SalleListComponent,
-    ReservationComponent
+    ReservationComponent,
+    EquipmentComponent,
+    AdminDashboardComponent,
+    LoginRegisterComponent
   ],
   imports: [
     BrowserModule,

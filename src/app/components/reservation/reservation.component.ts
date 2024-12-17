@@ -10,23 +10,27 @@ import Swal from 'sweetalert2';
   templateUrl: './reservation.component.html',
   styleUrls: ['./reservation.component.css']
 })
+
 export class ReservationComponent implements OnInit {
 
   @ViewChild('calendar')
   calendar!: FullCalendarModule;
 
   calendarOptions: any;
-  
+
+  users: any[] = [];
   salles: any[] = [];
   reservations: any[] = [];
   reservationData = {
     salle_id: '',
+    user_id: '',  // New user_id field
     start_time: '',
     end_time: '',
     preferences: '',
     resources: '',
-    email: ''  // Add email field to reservation data
+    email: ''
   };
+  
 
   constructor(
     private salleService: SalleService,
@@ -41,11 +45,18 @@ export class ReservationComponent implements OnInit {
     };
     this.loadSalles();
     this.loadReservations();
+    this.loadUsers();  // Fetch users
   }
 
   loadSalles() {
     this.salleService.getAllSalles().subscribe((data) => {
       this.salles = data;
+    });
+  }
+
+  loadUsers() {
+    this.reservationService.getUsers().subscribe((data) => {
+      this.users = data;
     });
   }
 
@@ -56,7 +67,7 @@ export class ReservationComponent implements OnInit {
 
       // Dynamically populate calendar events from reservations
       const events = this.reservations.map((reservation: any) => ({
-        title: `Réservation - ${reservation.salle.nom}`,
+        title: `Réservation - ${reservation.salle.nom} `,
         start: reservation.start_time,
         end: reservation.end_time,
       }));
