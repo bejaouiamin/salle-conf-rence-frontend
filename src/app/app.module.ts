@@ -6,21 +6,34 @@ import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { SalleListComponent } from './components/salle-list/salle-list.component';
-import { ReservationComponent } from './components/reservation/reservation.component';
+
+import { SalleListComponent } from './salle-list/salle-list.component';
+import { ReservationComponent } from './reservation/reservation.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { LoginRegisterComponent } from './login-register/login-register.component';
+import { HomeComponent } from './home/home.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
-import { EquipmentComponent } from './components/equipment/equipment.component';
-import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
-import { LoginRegisterComponent } from './components/login-register/login-register.component';
+import { EquipmentComponent } from './equipment/equipment.component';
+import { HeaderComponent } from './header/header.component';
+import { BookingFormComponent } from './booking-form/booking-form.component';
+import { BlogComponent } from './blog/blog.component';
+import { GalleryComponent } from './gallery/gallery.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SalleListComponent,
-    ReservationComponent,
-    EquipmentComponent,
+    ReservationComponent,  
     AdminDashboardComponent,
-    LoginRegisterComponent
+    LoginRegisterComponent,
+    HomeComponent,
+    EquipmentComponent,
+    HeaderComponent,
+    BookingFormComponent,
+    BlogComponent,
+    GalleryComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
@@ -29,8 +42,7 @@ import { LoginRegisterComponent } from './components/login-register/login-regist
     CommonModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FullCalendarModule 
-   
+    FullCalendarModule
     
   ],
   providers: [

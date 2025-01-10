@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": ["sweetalert2"],
             "outputPath": "dist/gestion-salle-conference",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -25,9 +26,12 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/tailwind.css"
             ],
-            "scripts": []
+            "scripts": [
+      
+            ]
           },
           "configurations": {
             "production": {
@@ -39,8 +43,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "250kb",
+                  "maximumError": "300kb"
                 }
               ],
               "outputHashing": "all"

@@ -8,6 +8,7 @@ import { catchError, Observable } from 'rxjs';
 export class ReservationService {
 
   private apiUrl = 'http://localhost:8000/api/reservation';
+  private apiUrl1 = 'http://localhost:8000/api/reservations';
 
   constructor(private http: HttpClient) {}
 
@@ -30,11 +31,11 @@ export class ReservationService {
     }
 
     updateReservation(id: number, data: any): Observable<any> {
-      return this.http.put(`${this.apiUrl}/${id}`, data);
+      return this.http.put(`${this.apiUrl1}/${id}`, data);
     }
 
     deleteReservation(id: number): Observable<any> {
-      return this.http.delete(`${this.apiUrl}/${id}`);
+      return this.http.delete(`${this.apiUrl1}/${id}`);
     }
 
     getUsers(): Observable<any> {

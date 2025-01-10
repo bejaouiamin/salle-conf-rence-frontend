@@ -1,0 +1,65 @@
+<!-- src/app/components/admin-dashboard/admin-dashboard.component.html -->
+
+<div class="admin-dashboard">
+
+  <div class="dashboard-container">
+    <h2>Bienvenue au Tableau de Bord</h2>
+    <button (click)="logout()">Se Déconnecter</button>
+  </div>
+
+  <h2>Tableau de Bord Administratif</h2>
+
+  <h3>Liste des Réservations</h3>
+  <table>
+    <tr>
+      <th>Salle</th>
+      <th>Début</th>
+      <th>Fin</th>
+      <th>Utilisateur</th>
+      <th>Actions</th>
+    </tr>
+    <tr *ngFor="let reservation of reservations">
+      <td>{{ reservation.salle.nom }}</td>
+      <td>{{ reservation.start_time }}</td>
+      <td>{{ reservation.end_time }}</td>
+      <td>{{ reservation.email }}</td>
+      <td>
+        <button (click)="deleteReservation(reservation.id)">Delete</button>
+        <button (click)="openUpdateModal(reservation)" style="color: yellow;">Update</button>
+      </td>
+    </tr>
+  </table>
+
+  <h3>Liste des Utilisateurs</h3>
+  <ul>
+    <li *ngFor="let user of users">
+      {{ user.name }} - Role: {{ user.role }}
+    </li>
+  </ul>
+  <!-- Update Reservation Modal -->
+  <div class="modal" [class.show]="isUpdateModalOpen">
+    <div class="modal-content">
+      <span class="close" (click)="closeUpdateModal()">&times;</span>
+      <h3>Update Reservation</h3>
+
+      <form #updateForm="ngForm" (ngSubmit)="onSubmitUpdate()">
+        <div>
+          <label for="start_time">Start Time:</label>
+          <input type="datetime-local" id="start_time" [(ngModel)]="selectedReservation.start_time" name="start_time" required />
+        </div>
+
+        <div>
+          <label for="end_time">End Time:</label>
+          <input type="datetime-local" id="end_time" [(ngModel)]="selectedReservation.end_time" name="end_time" required />
+        </div>
+
+        <div>
+          <label for="email">Email:</label>
+          <input type="email" id="email" [(ngModel)]="selectedReservation.email" name="email" required />
+        </div>
+
+        <button type="submit">Update Reservation</button>
+      </form>
+    </div>
+  </div>
+</div>

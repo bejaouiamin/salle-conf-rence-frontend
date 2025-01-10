@@ -1,0 +1,25 @@
+<div class="equipment-container">
+  <h2>Gestion des Équipements</h2>
+
+  <form (ngSubmit)="addEquipment()">
+    <label for="nom">Nom de l'équipement:</label>
+    <input type="text" [(ngModel)]="newEquipment.nom" name="nom" required />
+
+    <button type="submit">Ajouter Équipement</button>
+  </form>
+
+  <h3>Liste des Équipements</h3>
+  <ul>
+    <li *ngFor="let equipment of equipmentList">
+      <strong>{{ equipment.nom }}</strong> -
+      <span [ngClass]="{'available': equipment.is_available, 'unavailable': !equipment.is_available}">
+        {{ equipment.is_available ? 'Disponible' : 'Non Disponible' }}
+      </span>
+      (Status: {{ equipment.status }})
+      <button (click)="updateStatus(equipment.id, 'defective', false)">Signaler Défectueux</button>
+      <button (click)="updateStatus(equipment.id, 'functional', true)">Marquer Fonctionnel</button>
+      <button (click)="deleteEquipment(equipment.id)">Supprimer</button>
+    </li>
+  </ul>
+</div>
+
