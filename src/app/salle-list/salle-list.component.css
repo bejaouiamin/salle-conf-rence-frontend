@@ -1,26 +1,11 @@
+/* Add any component-specific styles here if needed */
 .container {
-    padding: 20px;
-    font-family: Arial, sans-serif;
+  max-width: 1200px;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
-  
-  h2 {
-    color: #2c3e50;
-  }
-  
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  li {
-    background: #ecf0f1;
-    margin: 10px 0;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  strong {
-    color: #2980b9;
-  }
-  
+}

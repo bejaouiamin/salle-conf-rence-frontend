@@ -1,43 +1,80 @@
-<!-- src/app/components/reservation/reservation.component.html -->
+<section class="py-16 bg-gray-50" style="margin-top: 15vh;">
+    <div class="container mx-auto px-4">
+        <!-- Header Section -->
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">List of Reservations</h1>
+            <p class="text-gray-600 leading-relaxed">
+                View all current and upcoming room reservations.
+            </p>
+        </div>
 
-<div class="reservation-container">
-    <h2>Faire une Réservation</h2>
-    <form (ngSubmit)="makeReservation()">
-        <label for="salle">Salle:</label>
-        <select [(ngModel)]="reservationData.salle_id" name="salle" required>
-            <option *ngFor="let salle of salles" [value]="salle.id">{{ salle.nom }}</option>
-        </select>
-        <label for="user">Utilisateur:</label>
-        <select [(ngModel)]="reservationData.user_id" name="user" required>
-            <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
-        </select>
+        <!-- Reservations Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div *ngFor="let reservation of reservations"
+                class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 p-6 relative">
+                <!-- Delete Icon -->
+                <button (click)="deleteReservation(reservation.id)"
+                    class="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </button>
 
+                <!-- Reservation Header -->
+                <div class="flex items-start justify-between mb-4">
+                    <h3 class="text-xl font-semibold text-gray-900">{{ reservation.salle.nom }}</h3>
+                    <span
+                        [class]="'inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ' + getStatusColor(reservation.start_time)">
+                        {{ getStatusText(reservation.start_time) }}
+                    </span>
+                </div>
 
-        <label for="start_time">Début:</label>
-        <input type="datetime-local" [(ngModel)]="reservationData.start_time" name="start_time" required />
+                <!-- User Info -->
+                <div class="flex items-center text-gray-600 mb-4">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <span>{{ reservation.email }}</span>
+                </div>
 
-        <label for="end_time">Fin:</label>
-        <input type="datetime-local" [(ngModel)]="reservationData.end_time" name="end_time" required />
+                <!-- Time Info -->
+                <div class="space-y-2 mb-6">
+                    <div class="flex items-center text-gray-600">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span>Beginning: {{ formatDateTime(reservation.start_time) }}</span>
+                    </div>
+                    <div class="flex items-center text-gray-600">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>End: {{ formatDateTime(reservation.end_time) }}</span>
+                    </div>
+                </div>
 
-        <label for="email">Email:</label>
-        <input type="email" [(ngModel)]="reservationData.email" name="email" required />
-
-        <label for="preferences">Préférences:</label>
-        <textarea [(ngModel)]="reservationData.preferences" name="preferences"></textarea>
-
-        <label for="resources">Ressources:</label>
-        <textarea [(ngModel)]="reservationData.resources" name="resources"></textarea>
-
-        <button type="submit">Réserver</button>
-    </form>
-
-    <h2>Réservations</h2>
-    <div *ngFor="let reservation of reservations">
-        <h3>{{ reservation.salle.nom }}</h3>
-        <p>Date et heure: {{ reservation.start_time }} - {{ reservation.end_time }}</p>
-        <p>Préférences: {{ reservation.preferences }}</p>
-        <p>Ressources: {{ reservation.resources }}</p>
+                <!-- Additional Info -->
+                <div class="space-y-3">
+                    <div *ngIf="reservation.preferences">
+                        <h4 class="text-sm font-medium text-gray-900 mb-2">Preferences</h4>
+                        <p class="text-sm text-gray-600">{{ reservation.preferences }}</p>
+                    </div>
+                    <div *ngIf="reservation.resources">
+                        <h4 class="text-sm font-medium text-gray-900 mb-2">Ressources</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span *ngFor="let resource of reservation.resources.split(',')"
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">
+                                {{ resource.trim() }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-
-<full-calendar [options]="calendarOptions"></full-calendar>
+</section>

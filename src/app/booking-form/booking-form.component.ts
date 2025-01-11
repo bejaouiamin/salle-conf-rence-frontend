@@ -3,12 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SalleService } from '../services/salle.service';
 import { ReservationService } from '../services/reservation.service';
 import Swal from 'sweetalert2';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-booking-form',
   templateUrl: './booking-form.component.html',
   styleUrls: ['./booking-form.component.css']
 })
+
 export class BookingFormComponent implements OnInit {
   bookingForm: FormGroup;
   salles: any[] = [];
@@ -16,7 +18,8 @@ export class BookingFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private salleService: SalleService,
-    private reservationService: ReservationService
+    private reservationService: ReservationService,
+    private authService: AuthService // Inject AuthService
   ) {
     this.bookingForm = this.fb.group({
       salle_id: ['', Validators.required],
@@ -39,8 +42,37 @@ export class BookingFormComponent implements OnInit {
   }
 
   makeReservation() {
+    // Check if the user is logged in and has the 'user' role
+    if (!this.authService.isLoggedIn()) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Not Logged In',
+        text: 'Please log in to make a reservation.',
+        confirmButtonColor: '#9333EA'
+      });
+      return;
+    }
+
+    const userRole = this.authService.getUserRole();
+    if (userRole !== 'user') {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Unauthorized',
+        text: 'You need the "user" role to make a reservation.',
+        confirmButtonColor: '#9333EA'
+      });
+      return;
+    }
+
+    // Add user_id explicitly if needed
+    const reservationData = {
+      ...this.bookingForm.value,
+      user_id: this.authService.getUserId() // Assuming AuthService has a method to get the logged-in user's ID
+    };
+
+    // Proceed with the reservation if the form is valid
     if (this.bookingForm.valid) {
-      this.reservationService.createReservation(this.bookingForm.value).subscribe(
+      this.reservationService.createReservation(reservationData).subscribe(
         (data) => {
           Swal.fire({
             icon: 'success',
@@ -63,6 +95,7 @@ export class BookingFormComponent implements OnInit {
       this.validateReservation();
     }
   }
+
 
   private validateReservation() {
     const controls = this.bookingForm.controls;

@@ -6,6 +6,12 @@ import { EquipmentComponent } from './equipment/equipment.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { LoginRegisterComponent } from './login-register/login-register.component';
 import { HomeComponent } from './home/home.component';
+import { SalleManagementComponent } from './salle-management/salle-management.component';
+import { AuthGuard } from './guards/auth.guard';
+import { RoleGuard } from './guards/role.guard';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { UserReservationsComponent } from './user-reservations/user-reservations.component';
+import { AdminReminderComponent } from './admin-reminder/admin-reminder.component';
 
 
 const routes: Routes = [
@@ -14,8 +20,12 @@ const routes: Routes = [
   { path: 'salle', component: SalleListComponent },
   { path: 'reservation', component: ReservationComponent },
   { path: 'equipment', component: EquipmentComponent },
-  { path: 'admin', component: AdminDashboardComponent },
+  { path: 'admin', component: AdminDashboardComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['admin'] } },
+  { path: 'user-dashboard',component: UserDashboardComponent,canActivate: [AuthGuard],data: { roles: ['user'] } },
   { path: 'login', component: LoginRegisterComponent },
+  { path: 'sallemanagement', component: SalleManagementComponent },
+  { path: 'user-reservation', component: UserReservationsComponent,canActivate: [AuthGuard],data: { roles: ['user'] }  },
+  { path: 'admin-Reminder', component: AdminReminderComponent,canActivate: [AuthGuard, RoleGuard], data: { roles: ['admin'] } },
   { path: '**', redirectTo: '/home' } // Wildcard route for 404
 ];
 

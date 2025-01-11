@@ -23,6 +23,7 @@
     "@angular/router": "^15.2.0",
     "@fullcalendar/angular": "^6.1.16",
     "@fullcalendar/daygrid": "^6.1.15",
+    "jwt-decode": "^4.0.0",
     "parse-json": "^8.1.0",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.6.13",

@@ -8,15 +8,17 @@ import { EquipmentService } from '../services/equipment.service';
   templateUrl: './equipment.component.html',
   styleUrls: ['./equipment.component.css']
 })
+
 export class EquipmentComponent {
   equipmentList: any[] = [];
-  newEquipment = { nom: '', is_available: true, status: 'functional' };
+  newEquipment = { nom: '', description: '', is_available: true, status: 'functional' };
 
-  constructor(private equipmentService: EquipmentService) {}
+  constructor(private equipmentService: EquipmentService) { }
 
   ngOnInit() {
     this.loadEquipment();
   }
+
   loadEquipment() {
     this.equipmentService.getAllEquipment().subscribe(data => {
       this.equipmentList = data;
@@ -25,19 +27,19 @@ export class EquipmentComponent {
 
   addEquipment() {
     this.equipmentService.createEquipment(this.newEquipment).subscribe(() => {
-      Swal.fire('Success', 'Equipment added successfully!', 'success');
+      Swal.fire('Succès', 'Équipement ajouté avec succès!', 'success');
       this.loadEquipment();
-      this.newEquipment = { nom: '', is_available: true, status: 'functional' };
+      this.newEquipment = { nom: '', description: '', is_available: true, status: 'functional' };
     });
   }
 
   updateStatus(id: number, status: string, isAvailable: boolean) {
     this.equipmentService.updateEquipmentStatus(id, status, isAvailable).subscribe(() => {
-      Swal.fire('Updated', 'Equipment status updated successfully!', 'success');
+      Swal.fire('Mis à jour', 'Statut de l\'équipement mis à jour avec succès!', 'success');
       this.loadEquipment();
     });
   }
-  
+
   deleteEquipment(id: number) {
     Swal.fire({
       title: 'Êtes-vous sûr de vouloir supprimer cet équipement ?',
@@ -59,5 +61,4 @@ export class EquipmentComponent {
       }
     });
   }
-
 }

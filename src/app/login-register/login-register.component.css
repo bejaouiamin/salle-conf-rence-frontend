@@ -1,32 +1,36 @@
 .image-wrapper {
-  position: sticky;
-  top: 0;
+  position: relative;
+  height: 100%;
+  width: 100%;
 }
 
 .image-wrapper img {
-  transition: transform 0.3s ease-in-out;
+  transition: all 0.8s ease;
+  filter: brightness(0.95) contrast(1.02);
+  mix-blend-mode: multiply;
 }
 
-.image-wrapper:hover img {
-  transform: scale(1.02);
+.image-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+       0%,
+       100%);
+  z-index: 1;
 }
 
-@media (min-width: 1024px) {
-  .image-wrapper::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to right,
-        rgba(249, 250, 251, 0.1),
-        rgba(249, 250, 251, 0));
-    pointer-events: none;
-  }
+.image-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right,
+      rgba(249, 250, 251, 0.2),
+      transparent);
+  z-index: 2;
 }
 
-/* Enhance form aesthetics */
+/* Keep the form aesthetics as they were */
 :host ::ng-deep {
 
   input:focus,

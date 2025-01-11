@@ -13,16 +13,17 @@ import Swal from 'sweetalert2';
 export class AdminDashboardComponent {
   reservations: any[] = [];
   users: any[] = [];
-
   selectedReservation: any = {};
   isUpdateModalOpen: boolean = false;
+  uniqueRooms: string[] = [];
+  activeTab: 'reservations' | 'users' = 'reservations';
 
   constructor(
     private reservationService: ReservationService,
     private userService: UserService,
-    private authService: AuthService, 
+    private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadReservations();
@@ -32,6 +33,7 @@ export class AdminDashboardComponent {
   loadReservations() {
     this.reservationService.getReservations().subscribe(data => {
       this.reservations = data;
+      this.uniqueRooms = Array.from(new Set(this.reservations.map(r => r.salle?.nom || '')));
     });
   }
 
@@ -39,6 +41,31 @@ export class AdminDashboardComponent {
     this.userService.getAllUsers().subscribe(data => {
       this.users = data;
     });
+  }
+
+  promoteToAdmin(userId: number) {
+    this.userService.updateUserRole(userId, 'admin').subscribe(() => {
+      Swal.fire('Success', 'User role updated to Admin.', 'success');
+      this.loadUsers(); // Refresh user list
+    });
+  }
+
+  filterReservationsByRoom(event: Event) {
+    const selectedRoom = (event.target as HTMLSelectElement).value;
+    if (selectedRoom === '') {
+      this.loadReservations(); // Reset to all reservations
+    } else {
+      this.reservations = this.reservations.filter(res => res.salle?.nom === selectedRoom);
+    }
+  }
+
+  checkReservationConflict(newReservation: any): boolean {
+    return this.reservations.some(
+      res =>
+        res.salle?.nom === newReservation.salle?.nom &&
+        ((newReservation.start_time >= res.start_time && newReservation.start_time < res.end_time) ||
+          (newReservation.end_time > res.start_time && newReservation.end_time <= res.end_time))
+    );
   }
 
   updateReservation1(id: number, data: any) {
@@ -52,16 +79,16 @@ export class AdminDashboardComponent {
       }
     );
   }
-  
+
   openUpdateModal(reservation: any) {
     this.selectedReservation = { ...reservation }; // Copy reservation data to avoid direct modification
     this.isUpdateModalOpen = true;
   }
-  
+
   closeUpdateModal() {
     this.isUpdateModalOpen = false;
   }
-  
+
   onSubmitUpdate() {
     this.updateReservation1(this.selectedReservation.id, this.selectedReservation);
     this.closeUpdateModal();
@@ -87,7 +114,7 @@ export class AdminDashboardComponent {
       }
     });
   }
-  
+
   logout() {
     this.authService.logout().subscribe(
       () => {

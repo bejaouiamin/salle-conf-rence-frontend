@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
   templateUrl: './login-register.component.html',
   styleUrls: ['./login-register.component.css']
 })
+
 export class LoginRegisterComponent implements OnInit {
   loginForm!: FormGroup;
   registerForm!: FormGroup;
@@ -48,29 +49,50 @@ export class LoginRegisterComponent implements OnInit {
 
   login() {
     if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.value).subscribe(
+      const credentials = {
+        email: this.loginForm.get('email')?.value,
+        password: this.loginForm.get('password')?.value
+      };
+  
+      this.authService.login(credentials).subscribe(
         (response) => {
-          this.authService.setToken(response.token);
           Swal.fire({
             icon: 'success',
             title: 'Connexion réussie!',
             text: 'Bienvenue!',
             confirmButtonColor: '#6366F1'
           });
-          this.router.navigate(['/admin']);
+  
+          this.navigateBasedOnRole();
         },
         (error) => {
+          console.error('Login Error:', error);
+          let errorMessage = 'Une erreur est survenue. Veuillez réessayer.';
+  
+          if (error.status === 401) {
+            errorMessage = 'Email ou mot de passe incorrect.';
+          } else if (error.status === 500) {
+            errorMessage = 'Erreur interne du serveur.';
+          }
+  
           Swal.fire({
             icon: 'error',
             title: 'Erreur',
-            text: 'Email ou mot de passe incorrect.',
+            text: errorMessage,
             confirmButtonColor: '#6366F1'
           });
         }
       );
+    } else {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Formulaire invalide',
+        text: 'Veuillez remplir tous les champs correctement.',
+        confirmButtonColor: '#6366F1'
+      });
     }
   }
-
+  
   register() {
     if (this.registerForm.valid) {
       this.authService.register(this.registerForm.value).subscribe(
@@ -78,11 +100,10 @@ export class LoginRegisterComponent implements OnInit {
           Swal.fire({
             icon: 'success',
             title: 'Inscription réussie!',
-            text: 'Vous pouvez maintenant vous connecter.',
+            text: 'Vous êtes maintenant connecté.',
             confirmButtonColor: '#6366F1'
           });
-          this.isRegistering = false;
-          this.registerForm.reset();
+          this.navigateBasedOnRole();
         },
         (error) => {
           Swal.fire({
@@ -93,6 +114,15 @@ export class LoginRegisterComponent implements OnInit {
           });
         }
       );
+    }
+  }
+
+  private navigateBasedOnRole() {
+    const userRole = this.authService.getUserRole();
+    if (userRole === 'admin') {
+      this.router.navigate(['/admin']);
+    } else {
+      this.router.navigate(['/user-dashboard']);
     }
   }
 }

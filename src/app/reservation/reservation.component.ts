@@ -1,8 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FullCalendarModule } from '@fullcalendar/angular';
+import { Component, OnInit } from '@angular/core';
 import { ReservationService } from 'src/app/services/reservation.service';
-import { SalleService } from 'src/app/services/salle.service';
-import dayGridPlugin from '@fullcalendar/daygrid';
+import { formatDate } from '@angular/common';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -10,57 +8,15 @@ import Swal from 'sweetalert2';
   templateUrl: './reservation.component.html',
   styleUrls: ['./reservation.component.css']
 })
-
 export class ReservationComponent implements OnInit {
-
-  @ViewChild('calendar')
-  calendar!: FullCalendarModule;
-
-  calendarOptions: any;
-
-  users: any[] = [];
-  salles: any[] = [];
   reservations: any[] = [];
-  reservationData = {
-    salle_id: '',
-    user_id: '',  // New user_id field
-    start_time: '',
-    end_time: '',
-    preferences: '',
-    resources: '',
-    email: ''
-  };
-  
 
-  constructor(
-    private salleService: SalleService,
-    private reservationService: ReservationService
-  ) { }
+  constructor(private reservationService: ReservationService) { }
 
   ngOnInit() {
-    this.calendarOptions = {
-      plugins: [dayGridPlugin],
-      initialView: 'dayGridMonth',
-      events: []  // Initialize with an empty array
-    };
-    this.loadSalles();
     this.loadReservations();
-    this.loadUsers();  // Fetch users
   }
 
-  loadSalles() {
-    this.salleService.getAllSalles().subscribe((data) => {
-      this.salles = data;
-    });
-  }
-
-  loadUsers() {
-    this.reservationService.getUsers().subscribe((data) => {
-      this.users = data;
-    });
-  }
-
-  // src/app/components/reservation/reservation.component.ts
   loadReservations() {
     this.reservationService.getReservations().subscribe((data) => {
       this.reservations = data;
@@ -72,31 +28,58 @@ export class ReservationComponent implements OnInit {
         end: reservation.end_time,
       }));
 
-      // Update calendar events
-      this.calendarOptions.events = events;
+
     });
   }
-
-
-  makeReservation() {
-    this.reservationService.createReservation(this.reservationData).subscribe(
-      (data) => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Réservation réussie!',
-          text: 'Un email de confirmation a été envoyé.',
-        });
-        this.loadReservations();  // Reload reservations after successful booking
-      },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Erreur',
-          text: `Erreur lors de la réservation : ${error.error.message}`,
-        });
-      }
-    );
+  formatDateTime(date: string): string {
+    return formatDate(date, 'dd MMM yyyy HH:mm', 'en-US');
   }
 
+  getStatusColor(startTime: string): string {
+    const now = new Date();
+    const start = new Date(startTime);
+    if (start < now) {
+      return 'bg-green-100 text-green-800'; // En cours/Passée
+    }
+    return 'bg-blue-100 text-blue-800'; // À venir
+  }
 
+  getStatusText(startTime: string): string {
+    const now = new Date();
+    const start = new Date(startTime);
+    return start < now ? 'En cours' : 'À venir';
+  }
+  deleteReservation(id: number) {
+    Swal.fire({
+      title: 'Êtes-vous sûr?',
+      text: "Cette action ne peut pas être annulée!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Oui, supprimer!',
+      cancelButtonText: 'Annuler'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.reservationService.deleteReservation(id).subscribe(
+          () => {
+            Swal.fire(
+              'Supprimé!',
+              'La réservation a été supprimée.',
+              'success'
+            );
+            this.loadReservations(); // Reload the reservations
+          },
+          (error) => {
+            Swal.fire(
+              'Erreur!',
+              'Une erreur est survenue lors de la suppression.',
+              'error'
+            );
+            console.error('Error deleting reservation:', error);
+          }
+        );
+      }
+    });
+  }
 }

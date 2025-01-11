@@ -1,9 +1,53 @@
-<div class="container">
-  <h2>Liste des Salles</h2>
-  <ul>
-    <li *ngFor="let salle of salles">
-      <strong>{{ salle.nom }}</strong> - Capacité: {{ salle.capacite }} - Localisation: {{ salle.localisation }}
-      <p>Équipements: {{ salle.equipements }}</p>
-    </li>
-  </ul>
-</div>
+<section class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <!-- Header Section -->
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">Salles & Espaces</h2>
+      <p class="text-gray-600 leading-relaxed">
+        Découvrez nos salles soigneusement aménagées offrant un environnement professionnel et confortable.
+        Chaque espace est équipé pour répondre à vos besoins spécifiques.
+      </p>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div *ngFor="let salle of salles"
+        class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <div class="p-6">
+          <!-- Room Header -->
+          <div class="flex justify-between items-start mb-4">
+            <h3 class="text-xl font-bold text-gray-900">{{ salle.nom }}</h3>
+            <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium">
+              {{ salle.capacite }} personnes
+            </span>
+          </div>
+
+          <!-- Location -->
+          <div class="flex items-center text-gray-600 mb-4">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span>{{ salle.localisation }}</span>
+          </div>
+
+          <!-- Divider -->
+          <div class="border-t border-gray-200 my-4"></div>
+
+          <!-- Equipment -->
+          <div class="space-y-2">
+            <h4 class="font-medium text-gray-900 mb-2">Équipements</h4>
+            <div class="flex flex-wrap gap-2">
+              <span *ngFor="let equipement of getEquipementsList(salle.equipements)"
+                class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">
+                {{ equipement }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

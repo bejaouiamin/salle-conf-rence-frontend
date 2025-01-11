@@ -19,6 +19,10 @@ import { BookingFormComponent } from './booking-form/booking-form.component';
 import { BlogComponent } from './blog/blog.component';
 import { GalleryComponent } from './gallery/gallery.component';
 import { FooterComponent } from './footer/footer.component';
+import { SalleManagementComponent } from './salle-management/salle-management.component';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { UserReservationsComponent } from './user-reservations/user-reservations.component';
+import { AdminReminderComponent } from './admin-reminder/admin-reminder.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +37,11 @@ import { FooterComponent } from './footer/footer.component';
     BookingFormComponent,
     BlogComponent,
     GalleryComponent,
-    FooterComponent
+    FooterComponent,
+    SalleManagementComponent,
+    UserDashboardComponent,
+    UserReservationsComponent,
+    AdminReminderComponent
   ],
   imports: [
     BrowserModule,
