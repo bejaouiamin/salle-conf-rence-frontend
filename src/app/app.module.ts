@@ -23,6 +23,7 @@ import { SalleManagementComponent } from './salle-management/salle-management.co
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { UserReservationsComponent } from './user-reservations/user-reservations.component';
 import { AdminReminderComponent } from './admin-reminder/admin-reminder.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { AdminReminderComponent } from './admin-reminder/admin-reminder.componen
     CommonModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FullCalendarModule
+    FullCalendarModule,
+    RouterModule
     
   ],
   providers: [

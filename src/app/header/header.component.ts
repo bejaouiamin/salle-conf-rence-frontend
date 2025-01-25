@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -18,7 +19,9 @@ export class HeaderComponent implements OnInit {
     { path: '/user-reservation', label: 'My Reservations', roles: ['user'] },
   ];
 
-  constructor(private authService: AuthService) {}
+  isMobileMenuOpen = false;
+
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.authService.authStateChanged.subscribe(() => {
@@ -37,7 +40,11 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.authService.logout().subscribe(() => {
-      // Handle logout, e.g., redirect to login page
+      this.router.navigate(['/login']);
     });
+  }
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 }

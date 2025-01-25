@@ -4,6 +4,15 @@
       EVENT MASTER
       <span class="text-gray-700">PRO</span>
     </a>
+    
+    <!-- Mobile menu button -->
+    <button (click)="toggleMobileMenu()" class="md:hidden text-gray-600 hover:text-purple-600 focus:outline-none">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+      </svg>
+    </button>
+
+    <!-- Desktop navigation -->
     <nav class="hidden md:flex space-x-6">
       <ng-container *ngFor="let item of navItems">
         <a 
@@ -26,7 +35,35 @@
         </button>
       </ng-template>
     </nav>
-    <div class="text-gray-600 font-medium hover:text-purple-600 transition-colors duration-300">
+
+    <!-- Mobile navigation -->
+    <div [ngClass]="{'hidden': !isMobileMenuOpen, 'block': isMobileMenuOpen}" class="absolute top-full left-0 right-0 bg-white shadow-md md:hidden">
+      <nav class="flex flex-col space-y-4 p-4">
+        <ng-container *ngFor="let item of navItems">
+          <a 
+            *ngIf="!item.roles || (item.roles && hasRole(item.roles))"
+            [routerLink]="item.path"
+            routerLinkActive="text-purple-600"
+            class="text-gray-600 hover:text-purple-600 font-medium transition-colors duration-300"
+            (click)="toggleMobileMenu()"
+          >
+            {{item.label}}
+          </a>
+        </ng-container>
+        <ng-container *ngIf="!isLoggedIn(); else mobileLoggedInTemplate">
+          <a routerLink="/login" class="text-gray-600 hover:text-purple-600 font-medium transition-colors duration-300" (click)="toggleMobileMenu()">
+            Login/Register
+          </a>
+        </ng-container>
+        <ng-template #mobileLoggedInTemplate>
+          <button (click)="logout(); toggleMobileMenu()" class="text-gray-600 hover:text-purple-600 font-medium transition-colors duration-300">
+            Logout
+          </button>
+        </ng-template>
+      </nav>
+    </div>
+
+    <div class="hidden md:block text-gray-600 font-medium hover:text-purple-600 transition-colors duration-300">
       <i class="fas fa-phone-alt mr-2"></i>+1 (555) 123-4567
     </div>
   </div>
