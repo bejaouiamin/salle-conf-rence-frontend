@@ -19,11 +19,11 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'salle', component: SalleListComponent },
   { path: 'reservation', component: ReservationComponent },
-  { path: 'equipment', component: EquipmentComponent },
+  { path: 'equipment', component: EquipmentComponent,canActivate: [AuthGuard] },
   { path: 'admin', component: AdminDashboardComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['admin'] } },
   { path: 'user-dashboard',component: UserDashboardComponent,canActivate: [AuthGuard],data: { roles: ['user'] } },
   { path: 'login', component: LoginRegisterComponent },
-  { path: 'sallemanagement', component: SalleManagementComponent },
+  { path: 'sallemanagement', component: SalleManagementComponent ,canActivate: [AuthGuard]},
   { path: 'user-reservation', component: UserReservationsComponent,canActivate: [AuthGuard],data: { roles: ['user'] }  },
   { path: 'admin-Reminder', component: AdminReminderComponent,canActivate: [AuthGuard, RoleGuard], data: { roles: ['admin'] } },
   { path: '**', redirectTo: '/home' } // Wildcard route for 404
